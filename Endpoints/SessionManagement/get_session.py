@@ -15,6 +15,9 @@ class GetSession:
     storage = None
     user_id = None
     all_data = None
+    error = None
+    example = None
+    message = None
 
     def get_session_info(self):
         response = x.get('https://aqa-proka4.org/sandbox/api/session', headers=get_headers())
@@ -57,3 +60,33 @@ class GetSession:
         assert self.all_data["limits"]["ttl"] == "permanent", f'Ошибка в параметре "ttl" в ответе == {self.all_data["limits"]["ttl"]}'
         assert self.all_data["storage"] == "postgresql", f'Ошибка в значении "storage", пришло {self.all_data["storage"]}'
         assert self.all_data["user_id"] == 524, f'Ошибка в значении "user_id" в ответе {self.all_data["user_id"]}'
+
+    def check_wrong_method(self):
+        response = x.post('https://aqa-proka4.org/sandbox/api/session', headers=get_headers())
+        assert response.status_code == 405, f'Ожидаем код POST ответа 405, пришел код {response.status_code}'
+
+        response = x.put('https://aqa-proka4.org/sandbox/api/session', headers=get_headers())
+        assert response.status_code == 405, f'Ожидаем код PUT ответа 405, пришел код {response.status_code}'
+
+        response = x.patch('https://aqa-proka4.org/sandbox/api/session', headers=get_headers())
+        assert response.status_code == 405, f'Ожидаем код PATCH ответа 405, пришел код {response.status_code}'
+
+    def check_no_token(self):
+        response = x.get('https://aqa-proka4.org/sandbox/api/session')
+        self.all_data = response.json()
+        self.error = response.json()['error']
+        self.example = response.json()['example']
+        self.message = response.json()['message']
+
+        return response
+
+    def check_parameters_in_response_no_token(self):
+        assert "error" in self.all_data.keys(), f'Ошибка отсутствует параметр "error" в ответе'
+        assert "example" in self.all_data.keys(), f'Ошибка отсутствует параметр "example" в ответе'
+        assert "message" in self.all_data.keys(), f'Ошибка отсутствует параметр "message" в ответе'
+
+    def check_meanings_parameters_in_response_no_token(self):
+        assert self.all_data["error"] == "Authorization required", f'Ошибка параметр "error", вместо него {self.all_data["error"]} в ответе'
+        assert self.all_data["example"] == "Authorization: Bearer sandbox_xxx...", f'Ошибка параметр "example", вместо него {self.all_data["example"]} в ответе'
+        assert self.all_data["message"] == "Use Bearer token in Authorization header or access via web interface", f'Ошибка параметр "message", вместо него {self.all_data["message"]} в ответе'
+
