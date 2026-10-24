@@ -15,7 +15,3 @@ def get_headers():
     "user-agent": fake.chrome(),
     "Cookie": "session=78c2a549-323c-4005-a783-f1bd18b08c18.1uUTJ8Rq6DpQHTyuH36SuBPh8ys"}
     return headers
-
-
-
-
