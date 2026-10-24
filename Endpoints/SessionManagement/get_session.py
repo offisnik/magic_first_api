@@ -1,10 +1,10 @@
 import httpx as x
+from Endpoints.cheks_for_every import EveryCheckes
 from conftest import get_headers
 
 
 
-class GetSession:
-    status_code = None
+class GetSession(EveryCheckes):
     bearer_token = None
     is_authenticated = None
     limits = None
@@ -23,9 +23,9 @@ class GetSession:
         response = x.get('https://aqa-proka4.org/sandbox/api/session', headers=get_headers())
 
         self.all_data = response.json()
-        self.status_code = response.status_code
         self.bearer_token = response.json()['bearer_token']
         self.is_authenticated = True
+        self.status_code = response.status_code
         self.limits = response.json()['limits']
         self.max_resource_size = response.json()['limits']['max_resource_size']
         self.max_resources_per_type = response.json()['limits']['max_resources_per_type']
@@ -34,9 +34,6 @@ class GetSession:
         self.storage = response.json()['storage']
         self.user_id = response.json()['user_id']
         return response
-
-    def check_code_answer(self):
-        assert self.status_code == 200, f'Ошибка в статус коде, пришло = {self.status_code}'
 
 
     def check_parameters_in_response(self):
