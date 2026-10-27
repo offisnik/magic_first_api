@@ -1,7 +1,7 @@
 import httpx as x
 from faker import Faker
-fake = Faker()
 
+fake = Faker()
 
 # Получение нового Токена
 def get_token():

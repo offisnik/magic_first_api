@@ -8,11 +8,11 @@ from Endpoints.SessionManagement.get_session import GetSession
 """
 
 def test_get_session_info():
-    get_session_endpoint = GetSession()
-    get_session_endpoint.get_session_info()
-    get_session_endpoint.status_code()
-    get_session_endpoint.check_parameters_in_response()
-    get_session_endpoint.check_meanings_parameters_in_response()
+    get_session_init = GetSession()
+    get_session_init.get_session_info()
+    get_session_init.check_code_answer()
+    get_session_init.check_parameters_in_response()
+    get_session_init.check_meanings_parameters_in_response()
 
 
 """
@@ -20,12 +20,12 @@ def test_get_session_info():
 """
 
 def test_get_session_wrong():
-    wrong_method = GetSession()
-    wrong_method.check_wrong_method()
+    get_session_init = GetSession()
+    get_session_init.check_wrong_method()
 
 
 def test_no_token():
-    no_token = GetSession()
-    no_token.check_no_token()
-    no_token.check_parameters_in_response_no_token()
-    no_token.check_meanings_parameters_in_response_no_token()
+    get_session_init = GetSession()
+    get_session_init.check_no_token()
+    get_session_init.check_parameters_in_response_no_token()
+    get_session_init.check_meanings_parameters_in_response_no_token()
